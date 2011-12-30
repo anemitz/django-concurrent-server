@@ -1,3 +1,4 @@
+import django
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 from optparse import make_option
@@ -32,7 +33,6 @@ class Command(BaseCommand):
     requires_model_validation = False
 
     def handle(self, addrport='', *args, **options):
-        import django
         from django.core.servers.basehttp import AdminMediaHandler, WSGIServerException
         from concurrent_server.servers import run
         from django.core.handlers.wsgi import WSGIHandler
@@ -72,7 +72,7 @@ class Command(BaseCommand):
             translation.activate(settings.LANGUAGE_CODE)
 
             try:
-                path = admin_media_path or DJANGO_ADMIN_MEDIA_PATH
+                path = admin_media_path or self.DJANGO_ADMIN_MEDIA_PATH
                 handler = AdminMediaHandler(WSGIHandler(), path)
                 run(addr, int(port), handler)
             except WSGIServerException, e:
